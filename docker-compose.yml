@@ -3,7 +3,7 @@ version: '3.7'
 services:
   service:
     container_name: service
-    image: 'ru.academics/myhelper-service:0.0.1'
+    image: 'ru.academicians/myhelper-service:0.0.1'
     restart: on-failure
     ports:
       - 27020:27020
