@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  service:
+    container_name: service
+    image: 'ru.academics/myhelper-service:0.0.1'
+    restart: on-failure
+    ports:
+      - 27020:27020
+    depends_on:
+      - yrd-postgres
+
+  postgres:
+    container_name: yrd-postgres
+    image: postgres:12.1-alpine
+    restart: on-failure
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+networks:
+  default:
+    name: test-network
+    driver: bridge
