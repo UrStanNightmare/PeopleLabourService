@@ -4,22 +4,22 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
-import static ru.academicians.myhelper.defaults.DefaultRequirements.MAX_NAME_LENGTH;
+import static ru.academicians.myhelper.defaults.DefaultRequirements.NAME_REGEXP;
 
 public class AddPersonRequest {
     @NotBlank
     @NotNull
-    @Size(max = MAX_NAME_LENGTH)
+    @Pattern(regexp = NAME_REGEXP)
     private String lastName;
 
     @NotBlank
     @NotNull
-    @Size(max = MAX_NAME_LENGTH)
+    @Pattern(regexp = NAME_REGEXP)
     private String firstName;
 
-    @Size(max = MAX_NAME_LENGTH)
+    @Pattern(regexp = NAME_REGEXP)
     @Nullable
     private String patronymic;
 
