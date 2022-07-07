@@ -8,5 +8,7 @@ import java.util.List;
 public interface DefaultUserService {
     List<User> getAllUsers();
 
-    String createNewUser(AddPersonRequest request);
+    long createNewUser(AddPersonRequest request);
+
+    User findUserById(long id);
 }
