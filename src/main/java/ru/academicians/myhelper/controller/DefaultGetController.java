@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.academicians.myhelper.model.DealInfoResponse;
+import ru.academicians.myhelper.repository.model.User;
 import ru.academicians.myhelper.service.DefaultDealsService;
 import ru.academicians.myhelper.service.DefaultUserService;
 
@@ -33,7 +34,6 @@ public class DefaultGetController {
     @ApiOperation(value = "Test availability")
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-
 
         return new ResponseEntity<>("Greetings from back)", HttpStatus.I_AM_A_TEAPOT);
     }

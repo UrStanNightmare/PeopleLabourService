@@ -77,18 +77,16 @@ public class DefaultPostController {
             throw new ItemNotFoundException(DEAL_NOT_FOUND_STRING);
         }
 
-        if (deal.getOwner().getId() == subscriberId) {
-
+        if (deal.getOwner() == subscriberId) {
             throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_SELF_STRING);
-
         }
 
-        long id = dealsService.subscribeUserToDealAndSave(user, deal);
+        String result = dealsService.addSubscription(dealId, subscriberId);
 
         return new ResponseEntity<>(
                 new OperationResultResponse(
                         "Subscribe",
-                        subscriberId + " to " + ((Long) id).toString()),
+                        result),
                 HttpStatus.CREATED);
     }
 }
