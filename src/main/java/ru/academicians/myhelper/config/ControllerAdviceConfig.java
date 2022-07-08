@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import ru.academicians.myhelper.exception.ItemNotFoundException;
 import ru.academicians.myhelper.model.ErrorResponse;
 
 @RestControllerAdvice
@@ -15,14 +16,25 @@ public class ControllerAdviceConfig {
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class,
-            MethodArgumentTypeMismatchException.class})
+            MethodArgumentTypeMismatchException.class,
+            IllegalArgumentException.class})
     public ResponseEntity<ErrorResponse> handleInvalidRequestArgumentException(
             Exception ex,
             WebRequest request) {
 
         return new ResponseEntity<>(
-                new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Validation failed"),
+                new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ItemNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleNotFoundException(
+            Exception ex,
+            WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage()),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {Exception.class})

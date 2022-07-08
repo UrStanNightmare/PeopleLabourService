@@ -1,38 +1,27 @@
 package ru.academicians.myhelper.repository.model;
 
-import ru.academicians.myhelper.defaults.DefaultKeys;
-import ru.academicians.myhelper.defaults.DefaultRequirements;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = DefaultKeys.USERS_TABLE_NAME)
 public class User {
-
-    @Id
-    @SequenceGenerator(name = "userIdSeq",
-            sequenceName = "users_id_sequence",
-            allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "userIdSeq")
     private Long id;
-    @Column(name = DefaultKeys.LAST_NAME_KEY,
-            nullable = false,
-            length = DefaultRequirements.MAX_NAME_LENGTH)
+
+    @NotNull
+    @NotBlank
     private String lastName;
 
-    @Column(name = DefaultKeys.FIRST_NAME_KEY,
-            nullable = false,
-            length = DefaultRequirements.MAX_NAME_LENGTH)
+    @NotNull
+    @NotBlank
     private String firstName;
 
-    @Column(name = DefaultKeys.PATRONYMIC_KEY,
-            nullable = true,
-            length = DefaultRequirements.MAX_NAME_LENGTH)
+    @NotNull
+    @NotBlank
     private String patronymic;
 
     public User() {
     }
+
 
     public User(String lastName, String firstName, String patronymic) {
         this.lastName = lastName;
@@ -40,11 +29,16 @@ public class User {
         this.patronymic = patronymic;
     }
 
-    public User(long id, String lastName, String firstName, String patronymic) {
+
+    public User(Long id, String lastName, String firstName, String patronymic) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.patronymic = patronymic;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
@@ -73,5 +67,18 @@ public class User {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(patronymic, user.patronymic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, patronymic);
     }
 }
