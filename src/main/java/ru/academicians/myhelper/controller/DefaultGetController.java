@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.academicians.myhelper.model.DealInfoResponse;
-import ru.academicians.myhelper.repository.model.User;
 import ru.academicians.myhelper.service.DefaultDealsService;
 import ru.academicians.myhelper.service.DefaultUserService;
 

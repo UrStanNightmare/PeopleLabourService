@@ -5,16 +5,19 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.academicians.myhelper.exception.ItemNotFoundException;
+import ru.academicians.myhelper.model.AddPersonRequest;
 import ru.academicians.myhelper.model.AddServiceRequest;
+import ru.academicians.myhelper.model.OperationResultResponse;
 import ru.academicians.myhelper.model.SubscribeRequest;
 import ru.academicians.myhelper.repository.model.Deal;
 import ru.academicians.myhelper.repository.model.User;
 import ru.academicians.myhelper.service.DefaultDealsService;
 import ru.academicians.myhelper.service.DefaultUserService;
-import ru.academicians.myhelper.model.AddPersonRequest;
-import ru.academicians.myhelper.model.OperationResultResponse;
 
 import javax.validation.Valid;
 
