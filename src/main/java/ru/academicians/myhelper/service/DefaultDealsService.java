@@ -10,7 +10,7 @@ public interface DefaultDealsService {
 
     Deal findDealById(long id);
 
-    long subscribeUserToDealAndSave(User user, Deal deal);
+    String addSubscription(long dealId, long subscriberId);
 
     DealInfoResponse getDealInformation(long id);
 }
