@@ -3,7 +3,7 @@ package ru.academicians.myhelper.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
-import ru.academicians.myhelper.repository.model.User;
+import ru.academicians.myhelper.repository.model.Deal;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -43,7 +43,7 @@ public class DealInfoResponse {
     private BigInteger price;
 
     @Nullable
-    private Set<User> subscribers;
+    private Set<Long> subscribers;
 
     public DealInfoResponse() {
     }
@@ -105,18 +105,28 @@ public class DealInfoResponse {
     }
 
     @Nullable
-    public Set<User> getSubscribers() {
+    public Set<Long> getSubscribers() {
         return subscribers;
     }
 
-    public void setSubscribers(@Nullable Set<User> subscribers) {
+    public void setSubscribers(@Nullable Set<Long> subscribers) {
         this.subscribers = subscribers;
     }
 
-    public void addSubscriber(User user) {
+    public void addSubscriber(long user) {
         if (subscribers == null){
             subscribers = new LinkedHashSet<>();
         }
         subscribers.add(user);
+    }
+
+    public void updateData(Deal dealDetailsById) {
+        this.id = dealDetailsById.getId();
+        this.city = dealDetailsById.getCity();
+        this.date = dealDetailsById.getDate();
+        this.description = dealDetailsById.getDescription();
+        this.name = dealDetailsById.getName();
+        this.price = dealDetailsById.getPrice();
+        this.ownerId = dealDetailsById.getOwner();
     }
 }
