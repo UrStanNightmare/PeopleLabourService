@@ -15,7 +15,7 @@ public class UserEntityRowMapper implements RowMapper<User> {
         result.setId(rs.getLong("id"));
         result.setFirstName(rs.getString("first_name"));
         result.setLastName(rs.getString("last_name"));
-        result.setPatronymic(rs.getString("patronymic"));
+        result.setMiddle_name(rs.getString("middle_name"));
         return result;
     }
 }
