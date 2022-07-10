@@ -84,6 +84,10 @@ public class DefaultPostController {
             throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_SELF_STRING);
         }
 
+        if (dealsService.isSubscriptionExists(dealId, subscriberId)){
+            throw new IllegalArgumentException(USER_ALREADY_SUBSCRIBED_STRING);
+        }
+
         String result = dealsService.addSubscription(dealId, subscriberId);
 
         return new ResponseEntity<>(
