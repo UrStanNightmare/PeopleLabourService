@@ -21,7 +21,7 @@ public class AddPersonRequest {
 
     @Pattern(regexp = NAME_REGEXP)
     @Nullable
-    private String patronymic;
+    private String middleName;
 
     public AddPersonRequest() {
     }
@@ -42,11 +42,11 @@ public class AddPersonRequest {
         this.firstName = firstName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 }
