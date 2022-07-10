@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS public.users
     id bigint NOT NULL,
     first_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
     last_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
-    patronymic character varying(30) COLLATE pg_catalog."default",
+    middle_name character varying(30) COLLATE pg_catalog."default",
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 
