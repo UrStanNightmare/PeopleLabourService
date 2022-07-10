@@ -7,7 +7,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static ru.academicians.myhelper.defaults.DefaultRequirements.DATE_PATTERN;
 public class Deal {
@@ -37,6 +39,8 @@ public class Deal {
     public Deal() {
     }
 
+    private Set<Long> subscribersSet;
+
     public Deal(String name, String description, String city, BigInteger price, Long owner, LocalDateTime date) {
         this.name = name;
         this.description = description;
@@ -44,6 +48,17 @@ public class Deal {
         this.price = price;
         this.owner = owner;
         this.date = date;
+    }
+
+    public Deal(Long id, String name, String description, String city, BigInteger price, Long owner, LocalDateTime date, Set<Long> subscribersSet) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.city = city;
+        this.price = price;
+        this.owner = owner;
+        this.date = date;
+        this.subscribersSet = subscribersSet;
     }
 
     public void setId(Long id) {
@@ -102,6 +117,21 @@ public class Deal {
         this.city = city;
     }
 
+    public Set<Long> getSubscribersSet() {
+        return subscribersSet;
+    }
+
+    public void setSubscribersSet(Set<Long> subscribersSet) {
+        this.subscribersSet = subscribersSet;
+    }
+
+    public void addSubscriberId(long subscriberId) {
+        if (this.subscribersSet == null){
+            this.subscribersSet = new LinkedHashSet<>();
+        }
+        this.subscribersSet.add(subscriberId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,5 +143,18 @@ public class Deal {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, city, price, owner, date);
+    }
+
+    @Override
+    public String toString() {
+        return "Deal{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", city='" + city + '\'' +
+                ", price=" + price +
+                ", owner=" + owner +
+                ", date=" + date +
+                '}';
     }
 }

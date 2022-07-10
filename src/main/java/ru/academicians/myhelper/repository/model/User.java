@@ -15,26 +15,24 @@ public class User {
     @NotBlank
     private String firstName;
 
-    @NotNull
-    @NotBlank
-    private String patronymic;
+    private String middle_name;
 
     public User() {
     }
 
 
-    public User(String lastName, String firstName, String patronymic) {
+    public User(String lastName, String firstName, String middle_name) {
         this.lastName = lastName;
         this.firstName = firstName;
-        this.patronymic = patronymic;
+        this.middle_name = middle_name;
     }
 
 
-    public User(Long id, String lastName, String firstName, String patronymic) {
+    public User(Long id, String lastName, String firstName, String middle_name) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.patronymic = patronymic;
+        this.middle_name = middle_name;
     }
 
     public Long getId() {
@@ -61,12 +59,12 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getMiddle_name() {
+        return middle_name;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setMiddle_name(String middle_name) {
+        this.middle_name = middle_name;
     }
 
     @Override
@@ -74,11 +72,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(patronymic, user.patronymic);
+        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(middle_name, user.middle_name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastName, firstName, patronymic);
+        return Objects.hash(id, lastName, firstName, middle_name);
     }
 }
