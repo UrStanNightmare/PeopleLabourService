@@ -14,9 +14,12 @@ public class DefaultRequirements {
 
 
     public static final String NAME_REGEXP = "^[a-zA-Zа-яА-Я-]{1,"+ MAX_NAME_LENGTH + "}$";
-    public static final String DEAL_NAME_REGEXP = "^[a-zA-Zа-яА-Я-.?! ]{1,"+ MAX_SERVICE_NAME_LENGTH + "}$";
-    public static final String DEAL_DESCRIPTION_REGEXP = "^[a-zA-Zа-яА-Я-.?! ]{1,"+ MAX_SERVICE_DESCRIPTION_LENGTH + "}$";
+    public static final String DEAL_NAME_REGEXP = "^[a-zA-Zа-яА-Я-.?!, ]{1,"+ MAX_SERVICE_NAME_LENGTH + "}$";
+    public static final String DEAL_DESCRIPTION_REGEXP = "^[a-zA-Zа-яА-Я-.?!, ]{1,"+ MAX_SERVICE_DESCRIPTION_LENGTH + "}$";
     public static final String DEAL_CITY_REGEXP = "^[a-zA-Zа-яА-Я0-9- ]{1,"+ MAX_SERVICE_CITY_LENGTH + "}$";
+
+    public static final String LOG_IN_REGEXP = "^[a-zA-Z0-9- ]{1,"+ MAX_NAME_LENGTH + "}$";
+    public static final String PASSWORD_REGEXP = "^[a-zA-Zа-яА-Я0-9- ]{1,"+ MAX_NAME_LENGTH + "}$";
 
     public static final long SERVICE_PRICE_MINIMAL = 0L;
 

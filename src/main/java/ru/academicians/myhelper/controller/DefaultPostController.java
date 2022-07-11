@@ -4,7 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ import static ru.academicians.myhelper.defaults.DefaultKeys.*;
 
 @Api(description = "BaseApi")
 @RestController
+@Validated
 @RequestMapping("api")
 public class DefaultPostController {
 
@@ -38,7 +41,7 @@ public class DefaultPostController {
     }
 
     @ApiOperation(value = "An attempt to add user to db")
-    @PostMapping("/add/user")
+    @PostMapping(value = "/add/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OperationResultResponse> addUser(@Valid @RequestBody AddPersonRequest request) {
 
         long id = userService.createNewUser(request);
@@ -48,7 +51,7 @@ public class DefaultPostController {
     }
 
     @ApiOperation(value = "An attempt to add service to db")
-    @PostMapping("/add/deal")
+    @PostMapping(value = "/add/deal", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OperationResultResponse> addUser(@Valid @RequestBody AddServiceRequest request) {
 
         User user = userService.findUserById(request.getOwnerId());
@@ -63,7 +66,7 @@ public class DefaultPostController {
     }
 
     @ApiOperation(value = "An attempt to subscribe user to deal")
-    @PostMapping("/subscribe/deal")
+    @PostMapping(value = "/subscribe/deal", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OperationResultResponse> subscribeUser(@Valid @RequestBody SubscribeRequest request) {
 
         long subscriberId = request.getSubscriberId();
@@ -84,7 +87,7 @@ public class DefaultPostController {
             throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_SELF_STRING);
         }
 
-        if (dealsService.isSubscriptionExists(dealId, subscriberId)){
+        if (dealsService.isSubscriptionExists(dealId, subscriberId)) {
             throw new IllegalArgumentException(USER_ALREADY_SUBSCRIBED_STRING);
         }
 

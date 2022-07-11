@@ -8,4 +8,6 @@ public interface DefaultUserRepository {
     long saveUser(User user);
 
     User selectByFullNameData(String firstName, String middleName, String lastName);
+
+    User findUserByLogin(String login);
 }

@@ -14,10 +14,12 @@ import ru.academicians.myhelper.model.ErrorResponse;
 @RestControllerAdvice
 public class ControllerAdviceConfig {
 
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class,
+    @ExceptionHandler(value = {
+            MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class,
             MethodArgumentTypeMismatchException.class,
-            IllegalArgumentException.class})
+            IllegalArgumentException.class,
+    })
     public ResponseEntity<ErrorResponse> handleInvalidRequestArgumentException(
             Exception ex,
             WebRequest request) {
@@ -27,7 +29,9 @@ public class ControllerAdviceConfig {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {ItemNotFoundException.class})
+    @ExceptionHandler(value = {
+            ItemNotFoundException.class
+    })
     public ResponseEntity<ErrorResponse> handleNotFoundException(
             Exception ex,
             WebRequest request) {
@@ -37,7 +41,9 @@ public class ControllerAdviceConfig {
                 HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(value = {
+            Exception.class
+    })
     public ResponseEntity<ErrorResponse> handleUnknownException(Exception ex, WebRequest req) {
 
         return new ResponseEntity<>(
