@@ -58,8 +58,6 @@ public class DefaultGetController {
             throw new ItemNotFoundException(USER_NOT_FOUND_STRING);
         }
 
-        System.out.println(userById);
-
         response.fillUserData(userById);
 
         List<Deal> userDeals = dealsService.findDealsByOwnerId(id);
@@ -69,7 +67,6 @@ public class DefaultGetController {
                 response.addPlacedDeals(new ShortDealInfoResponse(userDeal));
             }
         }
-
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
