@@ -16,3 +16,7 @@ spring:
     data: classpath*:database/populateDB.sql
     initialization-mode: always
     schema: classpath*:database/initDB.sql
+  security:
+    oauth2:
+      resource:
+        filter-order: 3
