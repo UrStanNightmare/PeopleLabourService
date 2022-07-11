@@ -1,9 +1,16 @@
 package ru.academicians.myhelper.repository.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Collection;
 
+@JsonIgnoreProperties(value = {
+        "password"
+})
 public class User {
     private Long id;
 
@@ -15,24 +22,36 @@ public class User {
     @NotBlank
     private String firstName;
 
-    private String middle_name;
+    private String middleName;
+
+    @NotNull
+    @NotBlank
+    private String login;
+
+    @NotNull
+    @NotBlank
+    private String password;
+
+    private Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
 
     public User() {
     }
 
-
-    public User(String lastName, String firstName, String middle_name) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middle_name = middle_name;
-    }
-
-
-    public User(Long id, String lastName, String firstName, String middle_name) {
+    public User(Long id, String lastName, String firstName, String middleName, String login, String password) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.middle_name = middle_name;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(String lastName, String firstName, String middleName, String login, String password) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
     }
 
     public Long getId() {
@@ -59,24 +78,35 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getMiddle_name() {
-        return middle_name;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setMiddle_name(String middle_name) {
-        this.middle_name = middle_name;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(middle_name, user.middle_name);
+    public String getLogin() {
+        return login;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, lastName, firstName, middle_name);
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Collection<GrantedAuthority> getGrantedAuthoritiesList() {
+        return grantedAuthoritiesList;
+    }
+
+    public void setGrantedAuthoritiesList(Collection<GrantedAuthority> grantedAuthoritiesList) {
+        this.grantedAuthoritiesList = grantedAuthoritiesList;
     }
 }
