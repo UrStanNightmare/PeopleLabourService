@@ -1,4 +1,4 @@
-package ru.academicians.myhelper.repository.mapper;
+package ru.academicians.myhelper.repository.mapper.deal;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Component
-public class DealEntityRowMapper implements RowMapper<Deal> {
-
+public class DetailedDealEntityRowMapper implements RowMapper<Deal> {
     @Override
     public Deal mapRow(ResultSet rs, int i) throws SQLException {
         Deal result = new Deal();
@@ -26,6 +25,12 @@ public class DealEntityRowMapper implements RowMapper<Deal> {
         result.setName(rs.getString("service_name"));
         result.setPrice(rs.getBigDecimal("service_price").toBigInteger());
         result.setOwner(rs.getLong("owner_id"));
+        String subscribersString = rs.getString("subscribers");
+        String[] split = subscribersString.split(",");
+        for (String s : split) {
+            long subscriberId = Long.parseLong(s);
+            result.addSubscriberId(subscriberId);
+        }
 
         return result;
     }
