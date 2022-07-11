@@ -76,6 +76,6 @@ public class DetailedUserInfoResponse {
         this.id = user.getId();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
-        this.middleName = user.getMiddle_name();
+        this.middleName = user.getMiddleName();
     }
 }
