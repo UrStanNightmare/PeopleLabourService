@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.academicians.myhelper.exception.ItemNotFoundException;
-import ru.academicians.myhelper.model.*;
+import ru.academicians.myhelper.model.AddPersonRequest;
+import ru.academicians.myhelper.model.AddServiceRequest;
+import ru.academicians.myhelper.model.OperationResultResponse;
+import ru.academicians.myhelper.model.SubscribeRequest;
 import ru.academicians.myhelper.repository.model.Deal;
 import ru.academicians.myhelper.repository.model.User;
 import ru.academicians.myhelper.service.DefaultDealsService;
@@ -95,12 +98,5 @@ public class DefaultPostController {
                         "Subscribe",
                         result),
                 HttpStatus.CREATED);
-    }
-
-    @ApiOperation(value = "An attempt to log in")
-    @PostMapping(value = "/public/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> tryToAuthUser(@RequestBody @Valid AuthorizationRequest request) {
-       return new ResponseEntity<>("Login", HttpStatus.OK);
-
     }
 }
