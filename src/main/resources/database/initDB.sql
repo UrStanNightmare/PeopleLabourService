@@ -19,12 +19,16 @@ CREATE SEQUENCE IF NOT EXISTS public.users_id_sequence
 ALTER SEQUENCE public.users_id_sequence
     OWNER TO postgres;
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE TABLE IF NOT EXISTS public.users
 (
     id bigint NOT NULL,
-    first_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
-    last_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
-    middle_name character varying(30) COLLATE pg_catalog."default",
+    first_name CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
+    last_name CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
+    middle_name CHARACTER VARYING(30) COLLATE pg_catalog."default",
+    login CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
+    password VARCHAR(60) COLLATE  pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 
@@ -77,5 +81,5 @@ CREATE TABLE IF NOT EXISTS public.deals_subscribers
 
     TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.services_subscribers
+ALTER TABLE IF EXISTS public.deals_subscribers
     OWNER to postgres;
