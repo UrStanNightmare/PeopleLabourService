@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 @JsonIgnoreProperties(value = {
         "password"
@@ -108,5 +109,30 @@ public class User {
 
     public void setGrantedAuthoritiesList(Collection<GrantedAuthority> grantedAuthoritiesList) {
         this.grantedAuthoritiesList = grantedAuthoritiesList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(middleName, user.middleName) && login.equals(user.login) && Objects.equals(password, user.password) && Objects.equals(grantedAuthoritiesList, user.grantedAuthoritiesList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, middleName, login, password, grantedAuthoritiesList);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", login='" + login + '\'' +
+                ", grantedAuthoritiesList=" + grantedAuthoritiesList +
+                '}';
     }
 }
