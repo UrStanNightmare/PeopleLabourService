@@ -3,6 +3,8 @@ package ru.academicians.myhelper.repository;
 import ru.academicians.myhelper.model.SubscriptionRecord;
 import ru.academicians.myhelper.repository.model.Deal;
 
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DefaultDealRepository {
@@ -17,4 +19,14 @@ public interface DefaultDealRepository {
     List<Deal> findDealsByUserId(long id);
 
     List<Deal> findAllDeals();
+
+    Deal findDealByOwnerIdAndCityAndDateAndDescriptionAndNameAndPrice(
+            Long id,
+            String city,
+            LocalDateTime date,
+            String description,
+            String name,
+            BigInteger price);
+
+    int deleteDealById(long id);
 }
