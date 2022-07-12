@@ -27,9 +27,14 @@ public class DetailedDealEntityRowMapper implements RowMapper<Deal> {
         result.setOwner(rs.getLong("owner_id"));
         String subscribersString = rs.getString("subscribers");
         String[] split = subscribersString.split(",");
-        for (String s : split) {
-            long subscriberId = Long.parseLong(s);
-            result.addSubscriberId(subscriberId);
+
+        if (split.length > 0){
+            for (String s : split) {
+                if (!s.isEmpty()){
+                    long subscriberId = Long.parseLong(s);
+                    result.addSubscriberId(subscriberId);
+                }
+            }
         }
 
         return result;
