@@ -5,9 +5,16 @@ public class DefaultKeys {
     //Exceptions
     public static final String USER_NOT_FOUND_STRING = "User not found!";
     public static final String USER_CANT_SUBSCRIBE_SELF_STRING = "User can't subscribe to his own deal!";
+    public static final String USER_CANT_SUBSCRIBE_ANOTHER_USER_STRING = "User can't subscribe another user to deal!";
     public static final String USER_ALREADY_SUBSCRIBED_STRING = "User already subscribed!";
     public static final String DEAL_NOT_FOUND_STRING = "Deal not found!";
-    public static final String AUTHENTICATION_FAILED = "Authentication failed!";
+    public static final String BAD_TOKEN = "Bad token";
+    public static final String CAN_T_DELETE_USER = "Can't delete user!";
+    public static final String CAN_T_DELETE_DEAL = "Can't delete deal!";
+    public static final String CAN_T_UPDATE = "Can't update different user!";
+    public static final String CAN_T_CREATE_NEW_DEAL = "Can't create new deal!";
+    public static final String USERNAME_OCCUPIED = "Username occupied!";
+    public static final String DEAL_ALREADY_EXISTS = "Deal already exists!";
 
 
     public static final String PRIVATE_KEY = "MIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC3o7qsi0b9YoIO\n" +
