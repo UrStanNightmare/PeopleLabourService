@@ -1,8 +1,10 @@
 package ru.academicians.myhelper.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,6 +18,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import ru.academicians.myhelper.service.DefaultUserService;
+import ru.academicians.myhelper.utils.CustomTokenIdCatcher;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -51,7 +56,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/api/add/user").permitAll()
+                .antMatchers("/api/add/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
@@ -66,20 +71,31 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui.html",
                 "/webjars/**",
                 "/swagger-ui/**",
-                "/api/add/user");
+                "/api/add/user/**");
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public CustomTokenIdCatcher customTokenIdCatcher(){
+        return new CustomTokenIdCatcher();
+    }
+
+
+    @Bean
+    public FilterRegistrationBean<CorsFilter> customCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
+        config.setAllowedMethods(Collections.singletonList("*"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
         config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
     }
+
 
     @Override
     @Bean
