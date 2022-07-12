@@ -18,6 +18,10 @@ public class DetailedUserInfoResponse {
     @NotBlank
     private String firstName;
 
+    @NotNull
+    @NotBlank
+    private String login;
+
     private String middleName;
 
     private List<ShortDealInfoResponse> placedDeals;
@@ -65,6 +69,14 @@ public class DetailedUserInfoResponse {
         this.placedDeals = placedDeals;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public void addPlacedDeals(ShortDealInfoResponse deal){
         if (this.placedDeals == null){
             this.placedDeals = new LinkedList<>();
@@ -77,5 +89,6 @@ public class DetailedUserInfoResponse {
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
         this.middleName = user.getMiddleName();
+        this.login = user.getLogin();
     }
 }
