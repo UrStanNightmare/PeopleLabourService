@@ -1,22 +1,20 @@
 package ru.academicians.myhelper.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import ru.academicians.myhelper.defaults.DefaultKeys;
 import ru.academicians.myhelper.exception.ItemNotFoundException;
-import ru.academicians.myhelper.model.AddServiceRequest;
-import ru.academicians.myhelper.model.AllDealsResponse;
-import ru.academicians.myhelper.model.DealInfoResponse;
-import ru.academicians.myhelper.model.SubscriptionRecord;
+import ru.academicians.myhelper.model.*;
 import ru.academicians.myhelper.repository.DefaultDealRepository;
 import ru.academicians.myhelper.repository.model.Deal;
-import ru.academicians.myhelper.repository.model.User;
 import ru.academicians.myhelper.service.DefaultDealsService;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+
+import static ru.academicians.myhelper.defaults.DefaultKeys.*;
 
 @Service
 public class DealsService implements DefaultDealsService {
@@ -28,7 +26,20 @@ public class DealsService implements DefaultDealsService {
     }
 
     @Override
-    public long createNewDeal(AddServiceRequest request, User user) {
+    public Long createNewDeal(AddServiceRequest request, DetailedUserInfoResponse user) {
+
+        Deal deal = dealsRepository.findDealByOwnerIdAndCityAndDateAndDescriptionAndNameAndPrice(
+                user.getId(),
+                request.getCity(),
+                request.getDate(),
+                request.getDescription(),
+                request.getName(),
+                request.getPrice()
+        );
+
+        if (deal != null){
+            throw new IllegalArgumentException(DEAL_ALREADY_EXISTS);
+        }
 
         String name = request.getName().trim();
         String description = request.getDescription().trim();
@@ -36,19 +47,31 @@ public class DealsService implements DefaultDealsService {
         BigInteger price = request.getPrice();
         LocalDateTime date = request.getDate();
 
-        long saveDealId = dealsRepository.createNewDeal(new Deal(name, description, city, price, user.getId(), date));
-
-        return saveDealId;
+        return dealsRepository.createNewDeal(new Deal(name, description, city, price, user.getId(), date));
     }
 
     @Override
     public Deal findDealById(long id) {
-        return dealsRepository.getDealDetailsById(id);
+        Deal dealDetailsById = dealsRepository.getDealDetailsById(id);
+
+        if (dealDetailsById == null) {
+            throw new ItemNotFoundException(DEAL_NOT_FOUND_STRING);
+        }
+        return dealDetailsById;
     }
 
     @Override
-    public String addSubscription(long dealId, long subscriberId) {
-        return dealsRepository.addUserSubscription(dealId, subscriberId);
+    public String addSubscription(Deal deal, long subscriberId) {
+        if (deal.getOwner() == subscriberId) {
+            throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_SELF_STRING);
+        }
+
+        if (isSubscriptionExists(deal.getId(), subscriberId)) {
+            throw new IllegalArgumentException(USER_ALREADY_SUBSCRIBED_STRING);
+        }
+
+
+        return dealsRepository.addUserSubscription(deal.getId(), subscriberId);
     }
 
     @Override
@@ -90,4 +113,21 @@ public class DealsService implements DefaultDealsService {
 
         return response;
     }
+
+    @Override
+    public int deleteDealCascade(long id, long idFromToken) {
+        Deal dealDetailsById = dealsRepository.getDealDetailsById(id);
+
+        if (dealDetailsById.getOwner() != idFromToken){
+            throw new BadCredentialsException(BAD_TOKEN);
+        }
+
+        if (dealDetailsById == null){
+            throw new IllegalArgumentException(CAN_T_DELETE_DEAL);
+        }
+
+        return dealsRepository.deleteDealById(id);
+    }
+
+
 }
