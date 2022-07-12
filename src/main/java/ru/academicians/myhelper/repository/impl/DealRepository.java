@@ -13,6 +13,7 @@ import ru.academicians.myhelper.repository.DefaultDealRepository;
 import ru.academicians.myhelper.repository.model.Deal;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -89,8 +90,11 @@ public class DealRepository implements DefaultDealRepository {
             return ps;
         }, keyHolder);
 
+        Long id = (Long) keyHolder.getKeys().get("id");
 
-        long id = (Long) keyHolder.getKeys().get("id");
+        if (id == null){
+            throw new RuntimeException("Can't create deal!");
+        }
 
         return id;
     }
@@ -115,6 +119,26 @@ public class DealRepository implements DefaultDealRepository {
                 "SELECT * from  deals WHERE owner_id = ?",
                 new Object[]{id},
                 dealRowMapper);
+    }
+
+    @Override
+    public Deal findDealByOwnerIdAndCityAndDateAndDescriptionAndNameAndPrice(Long ownerId, String city, LocalDateTime date, String description, String name, BigInteger price) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM deals " +
+                            "WHERE owner_id = ? AND service_city = ? AND service_date = ? AND service_desc = ? " +
+                            "AND service_name = ? and service_price = ?;",
+                    new Object[]{ownerId, city, date, description, name, price},
+                    dealRowMapper);
+        }catch(EmptyResultDataAccessException ex){
+            return null;
+        }
+    }
+
+    @Override
+    public int deleteDealById(long id) {
+        return jdbcTemplate.update("DELETE FROM deals WHERE id = ?;",
+                id);
     }
 
     @Override
