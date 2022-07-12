@@ -2,11 +2,16 @@ package ru.academicians.myhelper.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.academicians.myhelper.model.AddPersonRequest;
-import ru.academicians.myhelper.repository.model.User;
+import ru.academicians.myhelper.model.DetailedUserInfoResponse;
+import ru.academicians.myhelper.model.UpdateUserDataRequest;
 
 public interface DefaultUserService extends UserDetailsService {
 
     long createNewUser(AddPersonRequest request);
 
-    User findUserById(long id);
+    int deleteUserAndSubscriptionData(long id);
+
+    DetailedUserInfoResponse getDetailedUserInfoById(long id);
+
+    String updateUserWithData(long id, UpdateUserDataRequest request);
 }
