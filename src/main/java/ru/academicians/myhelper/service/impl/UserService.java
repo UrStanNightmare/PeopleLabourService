@@ -44,12 +44,13 @@ public class UserService implements DefaultUserService {
         String middleName = request.getMiddleName();
         String password = request.getPassword().trim();
         String login = request.getLogin().trim();
+        String phoneNumber = request.getPhoneNumber();
 
         if (middleName != null) {
             middleName = middleName.trim();
         }
 
-        return defaultUserRepository.saveUser(new User(lastName, firstName, middleName, login, passwordEncoder.encode(password)));
+        return defaultUserRepository.saveUser(new User(lastName, firstName, middleName, login, passwordEncoder.encode(password), phoneNumber));
     }
 
     @Override
