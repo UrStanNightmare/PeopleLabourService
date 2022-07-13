@@ -23,6 +23,7 @@ public class UserWithDetailsRowMapper implements RowMapper<DetailedUserInfoRespo
         result.setLastName(rs.getString("last_name"));
         result.setMiddleName(rs.getString("middle_name"));
         result.setLogin(rs.getString("login"));
+        result.setPhoneNumber(rs.getString("phone_number"));
 
         String deals = rs.getString("deals");
 

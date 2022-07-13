@@ -19,6 +19,7 @@ public class UserSecurityRowMapper  implements RowMapper<User> {
         result.setMiddleName(rs.getString("middle_name"));
         result.setPassword(rs.getString("password"));
         result.setLogin(rs.getString("login"));
+        result.setPhoneNumber(rs.getString("phone_number"));
         return result;
     }
 }
