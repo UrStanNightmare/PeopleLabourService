@@ -47,6 +47,6 @@ public class DefaultRequirements {
 
     public static final DateTimeFormatter DB_TEXT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DB_TEXT_DATE_PATTERN);
 
-    public static final String AVATAR_FOLDER_PATH = "avatars\\";
+    public static final String AVATAR_FOLDER_PATH = "data/avatars/";
     private DefaultRequirements(){}
 }

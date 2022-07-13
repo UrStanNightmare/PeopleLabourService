@@ -33,7 +33,7 @@ public class ImageService implements DefaultImageService {
 
         File avatarsFolder = Paths.get(AVATAR_FOLDER_PATH).toFile();
         if (!avatarsFolder.exists()){
-            avatarsFolder.mkdir();
+            avatarsFolder.mkdirs();
         }
     }
 
