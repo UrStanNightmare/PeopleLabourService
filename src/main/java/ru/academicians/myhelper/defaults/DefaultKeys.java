@@ -17,6 +17,7 @@ public class DefaultKeys {
     public static final String CAN_T_UNSUBSCRIBE = "Can't unsubscribe user!";
     public static final String USERNAME_OCCUPIED = "Username occupied!";
     public static final String DEAL_ALREADY_EXISTS = "Deal already exists!";
+    public static final String AVATAR_NOT_FOUND = "Avatar not found!";
 
 
     public static final String PRIVATE_KEY = "MIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC3o7qsi0b9YoIO\n" +
