@@ -10,6 +10,7 @@ import ru.academicians.myhelper.model.DetailedUserInfoResponse;
 import ru.academicians.myhelper.model.OperationResultResponse;
 import ru.academicians.myhelper.model.SubscribeRequest;
 import ru.academicians.myhelper.service.DefaultDealsService;
+import ru.academicians.myhelper.service.DefaultImageService;
 import ru.academicians.myhelper.service.DefaultUserService;
 import ru.academicians.myhelper.utils.CustomTokenIdCatcher;
 
@@ -25,12 +26,14 @@ public class DefaultDeleteController {
     private final DefaultUserService userService;
     private final DefaultDealsService dealsService;
     private final CustomTokenIdCatcher customTokenIdCatcher;
+    private final DefaultImageService imageService;
 
     @Autowired
-    public DefaultDeleteController(DefaultUserService userService, DefaultDealsService defaultDealsService, CustomTokenIdCatcher customTokenIdCatcher) {
+    public DefaultDeleteController(DefaultUserService userService, DefaultDealsService defaultDealsService, CustomTokenIdCatcher customTokenIdCatcher, DefaultImageService imageService) {
         this.userService = userService;
         this.dealsService = defaultDealsService;
         this.customTokenIdCatcher = customTokenIdCatcher;
+        this.imageService = imageService;
     }
 
     @ApiOperation(value = "An attempt to delete user")
@@ -44,6 +47,9 @@ public class DefaultDeleteController {
         }
 
         int deleted = userService.deleteUserAndSubscriptionData(id);
+
+
+        imageService.deleteUserAvatar(id);
 
         return new ResponseEntity<>(
                 new OperationResultResponse("Delete", "Deleted " + deleted + " el-s")
