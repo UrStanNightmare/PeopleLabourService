@@ -19,6 +19,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DealRepository implements DefaultDealRepository {
@@ -30,7 +31,7 @@ public class DealRepository implements DefaultDealRepository {
     private RowMapper<SubscriptionRecord> subscriptionRecordRowMapper;
 
     @Autowired
-    public DealRepository(JdbcTemplate jdbcTemplate, 
+    public DealRepository(JdbcTemplate jdbcTemplate,
                           @Qualifier("detailedDealEntityRowMapper") RowMapper<Deal> detailedDealRowMapper,
                           @Qualifier("dealEntityRowMapper") RowMapper<Deal> dealRowMapper,
                           RowMapper<SubscriptionRecord> subscriptionRecordRowMapper) {
@@ -66,11 +67,11 @@ public class DealRepository implements DefaultDealRepository {
                     "SELECT * FROM deals_subscribers WHERE deal_id = ? AND subscribers_id = ?;",
                     new Object[]{dealId, subscriberId},
                     subscriptionRecordRowMapper);
-        }catch(EmptyResultDataAccessException ex){
+        } catch (EmptyResultDataAccessException ex) {
             return null;
         }
     }
-    
+
     @Override
     public long createNewDeal(Deal deal) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -92,7 +93,7 @@ public class DealRepository implements DefaultDealRepository {
 
         Long id = (Long) keyHolder.getKeys().get("id");
 
-        if (id == null){
+        if (id == null) {
             throw new RuntimeException("Can't create deal!");
         }
 
@@ -130,7 +131,7 @@ public class DealRepository implements DefaultDealRepository {
                             "AND service_name = ? and service_price = ?;",
                     new Object[]{ownerId, city, date, description, name, price},
                     dealRowMapper);
-        }catch(EmptyResultDataAccessException ex){
+        } catch (EmptyResultDataAccessException ex) {
             return null;
         }
     }
@@ -142,15 +143,116 @@ public class DealRepository implements DefaultDealRepository {
     }
 
     @Override
-    public List<Deal> findAllDeals() {
+    public String deleteDealSubscriptionInfoByIdAndSubscriberId(long dealId, Long subscriberId) {
+        return jdbcTemplate.update("DELETE FROM deals_subscribers WHERE deal_id = ? AND subscribers_id = ?;",
+                dealId, subscriberId) + " vals.";
+    }
+
+    @Override
+    public String updateDealData(long id, Map<String, Object> updateData) {
+        StringBuilder result = new StringBuilder();
+
+        StringBuilder sqlStatementBuilder = new StringBuilder();
+        sqlStatementBuilder.append("UPDATE deals SET ");
+
+        Object[] updateObjects = new Object[updateData.size() + 1];
+        int i = 0;
+        for (Map.Entry<String, Object> updateDataEntry : updateData.entrySet()) {
+            String key = updateDataEntry.getKey();
+            sqlStatementBuilder.append(key + " = ?, ");
+
+            result.append(key + " ");
+
+            updateObjects[i] = updateDataEntry.getValue();
+
+            i++;
+        }
+        updateObjects[i] = id;
+
+        sqlStatementBuilder.setLength(sqlStatementBuilder.length() - 2);
+        sqlStatementBuilder.append(" WHERE id = ?;");
+
+        jdbcTemplate.update(sqlStatementBuilder.toString(), updateObjects);
+
+        return result.toString();
+    }
+
+    @Override
+    public List<Deal> findAllDeals(Map<String, Object> filterObjects) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT id, service_city, service_date, service_desc, service_name, service_price, " +
+                "owner_id, array_to_string(array_agg(distinct \"subscribers_id\"), ',') as subscribers " +
+                "FROM deals " +
+                "LEFT JOIN deals_subscribers " +
+                "ON deals.id = deals_subscribers.deal_id");
+
+        Object[] updateObjects = null;
+
+        if (filterObjects != null && !filterObjects.isEmpty()) {
+            queryBuilder.append(" WHERE ");
+            updateObjects = new Object[filterObjects.size()];
+            int i = 0;
+            for (Map.Entry<String, Object> filterObjectEntry : filterObjects.entrySet()) {
+                String key = filterObjectEntry.getKey();
+                if (key.contains("price")) {
+                    queryBuilder.append(key, 0, key.length() - 2);
+
+                    if (key.contains("_g")) {
+                        queryBuilder.append(" >= ? AND ");
+                    } else {
+                        queryBuilder.append(" <= ? AND ");
+                    }
+
+                    updateObjects[i] = filterObjectEntry.getValue();
+                    i++;
+
+                    continue;
+                }
+
+                if (key.contains("date")) {
+                    queryBuilder.append(key, 0, key.length() - 2);
+
+                    if (key.contains("_s")) {
+                        queryBuilder.append(" >= ?::timestamp AND ");
+                    } else {
+                        queryBuilder.append(" <= ?::timestamp AND ");
+                    }
+
+                    updateObjects[i] = Timestamp.valueOf(((LocalDateTime) filterObjectEntry.getValue()));
+
+                    i++;
+
+                    continue;
+                }
+
+                if (key.contains("city")){
+                    queryBuilder.append(key);
+
+                    queryBuilder.append(" LIKE ? AND ");
+
+                    updateObjects[i] = filterObjectEntry.getValue();
+                    i++;
+
+                    continue;
+                }
+
+                queryBuilder.append(key + " = ? AND ");
+
+                updateObjects[i] = filterObjectEntry.getValue();
+
+                i++;
+            }
+
+            queryBuilder.setLength(queryBuilder.length() - 4);
+        }
+
+
+        queryBuilder.append(" GROUP BY id;");
+
         try {
             return jdbcTemplate.query(
-                    "SELECT id, service_city, service_date, service_desc, service_name, service_price, " +
-                            "owner_id, array_to_string(array_agg(distinct \"subscribers_id\"), ',') as subscribers " +
-                            "FROM deals " +
-                            "LEFT JOIN deals_subscribers " +
-                            "ON deals.id = deals_subscribers.deal_id " +
-                            "GROUP BY id;",
+                    queryBuilder.toString(),
+                    updateObjects,
                     detailedDealRowMapper);
         } catch (EmptyResultDataAccessException ex) {
             return null;
