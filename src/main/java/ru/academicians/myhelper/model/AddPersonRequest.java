@@ -30,6 +30,10 @@ public class AddPersonRequest {
     @Pattern(regexp = PASSWORD_REGEXP)
     private String password;
 
+    @NotNull
+    @Pattern(regexp = PHONE_NUMBER_REGEXP)
+    private String phoneNumber;
+
     public AddPersonRequest() {
     }
 
@@ -71,5 +75,13 @@ public class AddPersonRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

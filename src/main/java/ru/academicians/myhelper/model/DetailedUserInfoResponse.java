@@ -1,7 +1,5 @@
 package ru.academicians.myhelper.model;
 
-import ru.academicians.myhelper.repository.model.User;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
@@ -23,6 +21,10 @@ public class DetailedUserInfoResponse {
     private String login;
 
     private String middleName;
+
+    @NotNull
+    @NotBlank
+    private String phoneNumber;
 
     private List<ShortDealInfoResponse> placedDeals;
 
@@ -77,18 +79,18 @@ public class DetailedUserInfoResponse {
         this.login = login;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public void addPlacedDeals(ShortDealInfoResponse deal){
         if (this.placedDeals == null){
             this.placedDeals = new LinkedList<>();
         }
         this.placedDeals.add(deal);
-    }
-
-    public void fillUserData(User user) {
-        this.id = user.getId();
-        this.lastName = user.getLastName();
-        this.firstName = user.getFirstName();
-        this.middleName = user.getMiddleName();
-        this.login = user.getLogin();
     }
 }
