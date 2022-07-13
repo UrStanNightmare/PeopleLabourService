@@ -6,6 +6,7 @@ import ru.academicians.myhelper.repository.model.Deal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface DefaultDealRepository {
     Deal getDealDetailsById(long id);
@@ -18,7 +19,7 @@ public interface DefaultDealRepository {
 
     List<Deal> findDealsByUserId(long id);
 
-    List<Deal> findAllDeals();
+    List<Deal> findAllDeals(Map<String, Object> filterObjects);
 
     Deal findDealByOwnerIdAndCityAndDateAndDescriptionAndNameAndPrice(
             Long id,
@@ -29,4 +30,8 @@ public interface DefaultDealRepository {
             BigInteger price);
 
     int deleteDealById(long id);
+
+    String deleteDealSubscriptionInfoByIdAndSubscriberId(long dealId, Long id);
+
+    String updateDealData(long id, Map<String, Object> updateArgs);
 }
