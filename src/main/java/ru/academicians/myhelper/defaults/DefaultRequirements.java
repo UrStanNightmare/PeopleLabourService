@@ -27,6 +27,9 @@ public class DefaultRequirements {
     public static final String PASSWORD_REGEXP = "^[a-zA-Zа-яА-Я0-9 -]{5,"+ MAX_NAME_LENGTH + "}$";
     public static final String PASSWORD_REGEXP_WITH_NULL = "^[a-zA-Zа-яА-Я0-9 \\s\\-]*$";
 
+    public static final String PHONE_NUMBER_REGEXP = "^(\\+7|7|8)?[\\s\\-]?[489][0-9]{2}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$";
+    public static final String PHONE_NUMBER_REGEXP_WITH_NULL = "^(((\\+7|7|8)?[\\s\\-]?[489][0-9]{2}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2})|[\\s\\-])?$";
+
     public static final long SERVICE_PRICE_MINIMAL = 0L;
 
     public static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -43,5 +46,7 @@ public class DefaultRequirements {
             .withResolverStyle(ResolverStyle.STRICT);
 
     public static final DateTimeFormatter DB_TEXT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DB_TEXT_DATE_PATTERN);
+
+    public static final String AVATAR_FOLDER_PATH = "avatars\\";
     private DefaultRequirements(){}
 }
