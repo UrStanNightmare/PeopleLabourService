@@ -11,8 +11,10 @@ public class DefaultKeys {
     public static final String BAD_TOKEN = "Bad token";
     public static final String CAN_T_DELETE_USER = "Can't delete user!";
     public static final String CAN_T_DELETE_DEAL = "Can't delete deal!";
-    public static final String CAN_T_UPDATE = "Can't update different user!";
+    public static final String CAN_T_UPDATE_USER = "Can't update different user!";
+    public static final String CAN_T_UPDATE_DEAL = "Can't update deal you don't own!";
     public static final String CAN_T_CREATE_NEW_DEAL = "Can't create new deal!";
+    public static final String CAN_T_UNSUBSCRIBE = "Can't unsubscribe user!";
     public static final String USERNAME_OCCUPIED = "Username occupied!";
     public static final String DEAL_ALREADY_EXISTS = "Deal already exists!";
 
