@@ -8,9 +8,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.academicians.myhelper.model.*;
 import ru.academicians.myhelper.repository.model.Deal;
 import ru.academicians.myhelper.service.DefaultDealsService;
+import ru.academicians.myhelper.service.DefaultImageService;
 import ru.academicians.myhelper.service.DefaultUserService;
 import ru.academicians.myhelper.utils.CustomTokenIdCatcher;
 
@@ -28,12 +30,14 @@ public class DefaultPostController {
     private final DefaultUserService userService;
     private final DefaultDealsService dealsService;
     private final CustomTokenIdCatcher customTokenIdCatcher;
+    private final DefaultImageService imageService;
 
     @Autowired
-    public DefaultPostController(DefaultUserService userService, DefaultDealsService dealsService, CustomTokenIdCatcher customTokenIdCatcher) {
+    public DefaultPostController(DefaultUserService userService, DefaultDealsService dealsService, CustomTokenIdCatcher customTokenIdCatcher, DefaultImageService imageService) {
         this.userService = userService;
         this.dealsService = dealsService;
         this.customTokenIdCatcher = customTokenIdCatcher;
+        this.imageService = imageService;
     }
 
     @ApiOperation(value = "An attempt to add user to db")
@@ -85,5 +89,22 @@ public class DefaultPostController {
                         "Subscribe",
                         result),
                 HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "An attempt to set user avatar")
+    @PostMapping(value = "/user/avatar",
+            produces = MediaType.APPLICATION_JSON_VALUE
+//            consumes = MediaType.IMAGE_PNG_VALUE
+    )
+    public ResponseEntity<OperationResultResponse> updateUserAvatar(
+            @RequestParam("avatarFile") MultipartFile file,
+            @RequestHeader(name="Authorization") String token) {
+
+        long idFromToken = customTokenIdCatcher.getIdFromToken(token);
+
+        imageService.updateUserAvatar(idFromToken, file);
+
+
+        return new ResponseEntity<>(new OperationResultResponse("Update avatar","Ok"), HttpStatus.CREATED);
     }
 }
