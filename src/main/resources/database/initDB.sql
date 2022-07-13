@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public.users
     middle_name CHARACTER VARYING(30) COLLATE pg_catalog."default",
     login CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
     password VARCHAR(60) COLLATE  pg_catalog."default" NOT NULL,
+    phone_number VARCHAR(12) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 
