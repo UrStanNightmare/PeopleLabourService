@@ -6,16 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.academicians.myhelper.model.AllDealsResponse;
+import ru.academicians.myhelper.model.DealFilter;
 import ru.academicians.myhelper.model.DealInfoResponse;
 import ru.academicians.myhelper.model.DetailedUserInfoResponse;
 import ru.academicians.myhelper.service.DefaultDealsService;
 import ru.academicians.myhelper.service.DefaultUserService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Validated
@@ -59,9 +58,9 @@ public class DefaultGetController {
 
     @ApiOperation(value = "Get all deal information")
     @GetMapping("/deal/all")
-    public ResponseEntity<AllDealsResponse> getAllDealsInfo() {
+    public ResponseEntity<AllDealsResponse> getAllDealsInfo(@Valid @RequestBody(required = false) DealFilter filter) {
 
-        AllDealsResponse allDealsResponse = dealsService.getAllDealsInfo();
+        AllDealsResponse allDealsResponse = dealsService.getAllDealsInfo(filter);
 
         return new ResponseEntity<>(allDealsResponse, HttpStatus.OK);
     }

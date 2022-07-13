@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.academicians.myhelper.model.*;
@@ -48,7 +47,9 @@ public class DefaultPostController {
 
     @ApiOperation(value = "An attempt to add deal to db")
     @PostMapping(value = "/add/deal", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OperationResultResponse> addDeal(OAuth2Authentication auth, @Valid @RequestBody AddServiceRequest request, @RequestHeader(name="Authorization") String token) {
+    public ResponseEntity<OperationResultResponse> addDeal(
+            @Valid @RequestBody AddServiceRequest request,
+            @RequestHeader(name="Authorization") String token) {
 
         if (!customTokenIdCatcher.isIdInTokenEquals(token, request.getOwnerId())){
             throw new IllegalArgumentException(CAN_T_CREATE_NEW_DEAL);
@@ -63,7 +64,9 @@ public class DefaultPostController {
 
     @ApiOperation(value = "An attempt to subscribe user to deal")
     @PostMapping(value = "/subscribe/deal", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OperationResultResponse> subscribeUser(OAuth2Authentication auth, @Valid @RequestBody SubscribeRequest request, @RequestHeader(name="Authorization") String token) {
+    public ResponseEntity<OperationResultResponse> subscribeUser(
+            @Valid @RequestBody SubscribeRequest request,
+            @RequestHeader(name="Authorization") String token) {
         if (!customTokenIdCatcher.isIdInTokenEquals(token, request.getSubscriberId())){
             throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_ANOTHER_USER_STRING);
         }
