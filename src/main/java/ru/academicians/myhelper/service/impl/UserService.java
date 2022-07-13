@@ -112,8 +112,6 @@ public class UserService implements DefaultUserService {
             updateArgs.put("password", passwordEncoder.encode((String) updateArgs.get("password")));
         }
 
-        String result = defaultUserRepository.updateUserData(id, updateArgs);
-
-        return result;
+        return defaultUserRepository.updateUserData(id, updateArgs);
     }
 }
