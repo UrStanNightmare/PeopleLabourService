@@ -33,19 +33,15 @@ public class User {
     @NotBlank
     private String password;
 
+    @NotNull
+    @NotBlank
+    private String phoneNumber;
+
     private Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
 
     public User() {
     }
 
-    public User(Long id, String lastName, String firstName, String middleName, String login, String password) {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.login = login;
-        this.password = password;
-    }
 
     public User(String lastName, String firstName, String middleName, String login, String password) {
         this.lastName = lastName;
@@ -111,17 +107,44 @@ public class User {
         this.grantedAuthoritiesList = grantedAuthoritiesList;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User(Long id, String lastName, String firstName, String middleName, String login, String password, String phoneNumber) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User(String lastName, String firstName, String middleName, String login, String password, String phoneNumber) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(middleName, user.middleName) && login.equals(user.login) && Objects.equals(password, user.password) && Objects.equals(grantedAuthoritiesList, user.grantedAuthoritiesList);
+        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(middleName, user.middleName) && login.equals(user.login) && password.equals(user.password) && phoneNumber.equals(user.phoneNumber) && Objects.equals(grantedAuthoritiesList, user.grantedAuthoritiesList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastName, firstName, middleName, login, password, grantedAuthoritiesList);
+        return Objects.hash(id, lastName, firstName, middleName, login, password, phoneNumber, grantedAuthoritiesList);
     }
 
     @Override
@@ -132,6 +155,8 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", grantedAuthoritiesList=" + grantedAuthoritiesList +
                 '}';
     }
