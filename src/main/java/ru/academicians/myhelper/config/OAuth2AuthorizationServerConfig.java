@@ -17,12 +17,12 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import ru.academicians.myhelper.defaults.DefaultKeys;
 import ru.academicians.myhelper.security.CustomTokenEnhancer;
 
 import java.util.Arrays;
 
-import static ru.academicians.myhelper.defaults.DefaultKeys.*;
+import static ru.academicians.myhelper.defaults.DefaultKeys.PRIVATE_KEY;
+import static ru.academicians.myhelper.defaults.DefaultKeys.PUBLIC_KEY;
 
 @Configuration
 @EnableAuthorizationServer
