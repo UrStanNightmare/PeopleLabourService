@@ -13,6 +13,7 @@ import ru.academicians.myhelper.service.DefaultDealsService;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static ru.academicians.myhelper.defaults.DefaultKeys.*;
 
@@ -37,7 +38,7 @@ public class DealsService implements DefaultDealsService {
                 request.getPrice()
         );
 
-        if (deal != null){
+        if (deal != null) {
             throw new IllegalArgumentException(DEAL_ALREADY_EXISTS);
         }
 
@@ -75,6 +76,27 @@ public class DealsService implements DefaultDealsService {
     }
 
     @Override
+    public String unsubscribeUser(long dealId, DetailedUserInfoResponse user) {
+        SubscriptionRecord subscriptionInfoByDealIdAndSubscriberId = dealsRepository.getSubscriptionInfoByDealIdAndSubscriberId(dealId, user.getId());
+        if (subscriptionInfoByDealIdAndSubscriberId == null) {
+            return "nothing";
+        }
+
+        return dealsRepository.deleteDealSubscriptionInfoByIdAndSubscriberId(dealId, user.getId());
+    }
+
+    @Override
+    public String updateDealWithData(DealInfoResponse dealInformation, UpdateDealRequest request) {
+        Map<String, Object> updateArgs = request.toHashMap();
+        if (updateArgs.isEmpty()) {
+            return "nothing";
+        }
+
+        return dealsRepository.updateDealData(dealInformation.getId(), updateArgs);
+    }
+
+
+    @Override
     public DealInfoResponse getDealInformation(long id) {
         Deal dealDetailsById = dealsRepository.getDealDetailsById(id);
         if (dealDetailsById == null) {
@@ -103,10 +125,17 @@ public class DealsService implements DefaultDealsService {
     }
 
     @Override
-    public AllDealsResponse getAllDealsInfo() {
+    public AllDealsResponse getAllDealsInfo(DealFilter filter) {
         AllDealsResponse response = new AllDealsResponse();
 
-        List<Deal> deals = dealsRepository.findAllDeals();
+        Map<String, Object> filterObjects = null;
+
+        if (filter != null) {
+            filterObjects = filter.toHashMap();
+            response.setFilter(filterObjects);
+        }
+
+        List<Deal> deals = dealsRepository.findAllDeals(filterObjects);
         for (Deal deal : deals) {
             response.addDeal(new DealInfoResponse(deal));
         }
@@ -118,11 +147,15 @@ public class DealsService implements DefaultDealsService {
     public int deleteDealCascade(long id, long idFromToken) {
         Deal dealDetailsById = dealsRepository.getDealDetailsById(id);
 
-        if (dealDetailsById.getOwner() != idFromToken){
+        if (dealDetailsById == null) {
+            throw new ItemNotFoundException(DEAL_NOT_FOUND_STRING);
+        }
+
+        if (dealDetailsById.getOwner() != idFromToken) {
             throw new BadCredentialsException(BAD_TOKEN);
         }
 
-        if (dealDetailsById == null){
+        if (dealDetailsById == null) {
             throw new IllegalArgumentException(CAN_T_DELETE_DEAL);
         }
 
