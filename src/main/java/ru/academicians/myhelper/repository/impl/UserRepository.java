@@ -25,18 +25,14 @@ import java.util.Map;
 public class UserRepository implements DefaultUserRepository {
 
     private JdbcTemplate jdbcTemplate;
-    private RowMapper<User> userRowMapper;
     private RowMapper<User> userSecurityRowMapper;
-
     private RowMapper<DetailedUserInfoResponse> detailedUserInfoResponseRowMapper;
 
     @Autowired
     public UserRepository(JdbcTemplate jdbcTemplate,
-                          @Qualifier("userEntityRowMapper") RowMapper<User> userRowMapper,
                           @Qualifier("userSecurityRowMapper") RowMapper<User> userSecurityRowMapper,
                           RowMapper<DetailedUserInfoResponse> detailedUserInfoResponseRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.userRowMapper = userRowMapper;
         this.userSecurityRowMapper = userSecurityRowMapper;
         this.detailedUserInfoResponseRowMapper = detailedUserInfoResponseRowMapper;
     }
@@ -48,10 +44,10 @@ public class UserRepository implements DefaultUserRepository {
             return jdbcTemplate.queryForObject(
                     "SELECT users_with_param.id, users_with_param.first_name, " +
                             "users_with_param.last_name, users_with_param.middle_name, " +
-                            "users_with_param.login,\n" +
+                            "users_with_param.login, users_with_param.phone_number, " +
                             "array_to_string(array_agg(distinct \"deal_info\"), ',') as deals " +
                             "FROM " +
-                            " (SELECT users.id, first_name, last_name, middle_name, login, " +
+                            " (SELECT users.id, first_name, last_name, middle_name, login, phone_number, " +
                             " CONCAT(deals.id,'|', " +
                             " deals.service_city,'|', " +
                             " deals.service_date,'|', " +
@@ -64,7 +60,7 @@ public class UserRepository implements DefaultUserRepository {
                             "WHERE users_with_param.id = ? " +
                             "GROUP BY users_with_param.id, users_with_param.first_name, " +
                             "users_with_param.last_name, users_with_param.middle_name, " +
-                            "users_with_param.login;",
+                            "users_with_param.login, users_with_param.phone_number;",
                     new Object[]{id},
                     detailedUserInfoResponseRowMapper);
         } catch (EmptyResultDataAccessException ex) {
@@ -129,16 +125,16 @@ public class UserRepository implements DefaultUserRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO users(first_name, last_name, middle_name, login, password) VALUES (? ,? ,?, ?, ? )",
+                    "INSERT INTO users(first_name, last_name, middle_name, login, password, phone_number) VALUES (? ,? ,?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getMiddleName());
             ps.setString(4, user.getLogin());
             ps.setString(5, user.getPassword());
+            ps.setString(6, user.getPhoneNumber());
             return ps;
         }, keyHolder);
-
 
         long id = (Long) keyHolder.getKeys().get("id");
 
