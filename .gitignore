@@ -3,6 +3,8 @@ deploy.bat
 stop.bat
 *.tar
 /.docker*
+avatars/
+data/
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -36,4 +38,3 @@ build/
 
 ### VS Code ###
 .vscode/
-

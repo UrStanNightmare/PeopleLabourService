@@ -48,6 +48,17 @@ public class DealInfoResponse {
     public DealInfoResponse() {
     }
 
+    public DealInfoResponse(Deal deal) {
+        this.id = deal.getId();
+        this.ownerId = deal.getOwner();
+        this.name = deal.getName();
+        this.description = deal.getDescription();
+        this.city = deal.getCity();
+        this.date = deal.getDate();
+        this.price = deal.getPrice();
+        this.subscribers = deal.getSubscribersSet();
+    }
+
     public long getId() {
         return id;
     }
@@ -114,7 +125,7 @@ public class DealInfoResponse {
     }
 
     public void addSubscriber(long user) {
-        if (subscribers == null){
+        if (subscribers == null) {
             subscribers = new LinkedHashSet<>();
         }
         subscribers.add(user);
@@ -128,5 +139,7 @@ public class DealInfoResponse {
         this.name = dealDetailsById.getName();
         this.price = dealDetailsById.getPrice();
         this.ownerId = dealDetailsById.getOwner();
+        this.subscribers = dealDetailsById.getSubscribersSet();
+
     }
 }

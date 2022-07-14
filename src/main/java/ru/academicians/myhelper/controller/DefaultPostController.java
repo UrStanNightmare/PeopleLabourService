@@ -4,92 +4,106 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.academicians.myhelper.exception.ItemNotFoundException;
-import ru.academicians.myhelper.model.AddPersonRequest;
-import ru.academicians.myhelper.model.AddServiceRequest;
-import ru.academicians.myhelper.model.OperationResultResponse;
-import ru.academicians.myhelper.model.SubscribeRequest;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.academicians.myhelper.model.*;
 import ru.academicians.myhelper.repository.model.Deal;
-import ru.academicians.myhelper.repository.model.User;
 import ru.academicians.myhelper.service.DefaultDealsService;
+import ru.academicians.myhelper.service.DefaultImageService;
 import ru.academicians.myhelper.service.DefaultUserService;
+import ru.academicians.myhelper.utils.CustomTokenIdCatcher;
 
 import javax.validation.Valid;
 
-import static ru.academicians.myhelper.defaults.DefaultKeys.*;
+import static ru.academicians.myhelper.defaults.DefaultKeys.CAN_T_CREATE_NEW_DEAL;
+import static ru.academicians.myhelper.defaults.DefaultKeys.USER_CANT_SUBSCRIBE_ANOTHER_USER_STRING;
 
 @Api(description = "BaseApi")
 @RestController
+@Validated
 @RequestMapping("api")
 public class DefaultPostController {
 
     private final DefaultUserService userService;
     private final DefaultDealsService dealsService;
+    private final CustomTokenIdCatcher customTokenIdCatcher;
+    private final DefaultImageService imageService;
 
     @Autowired
-    public DefaultPostController(DefaultUserService userService, DefaultDealsService dealsService) {
+    public DefaultPostController(DefaultUserService userService, DefaultDealsService dealsService, CustomTokenIdCatcher customTokenIdCatcher, DefaultImageService imageService) {
         this.userService = userService;
         this.dealsService = dealsService;
+        this.customTokenIdCatcher = customTokenIdCatcher;
+        this.imageService = imageService;
     }
 
     @ApiOperation(value = "An attempt to add user to db")
-    @PostMapping("/add/user")
+    @PostMapping(value = "/add/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OperationResultResponse> addUser(@Valid @RequestBody AddPersonRequest request) {
 
         long id = userService.createNewUser(request);
 
-
         return new ResponseEntity<>(new OperationResultResponse("Add", ((Long) id).toString()), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "An attempt to add service to db")
-    @PostMapping("/add/deal")
-    public ResponseEntity<OperationResultResponse> addUser(@Valid @RequestBody AddServiceRequest request) {
+    @ApiOperation(value = "An attempt to add deal to db")
+    @PostMapping(value = "/add/deal", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OperationResultResponse> addDeal(
+            @Valid @RequestBody AddServiceRequest request,
+            @RequestHeader(name="Authorization") String token) {
 
-        User user = userService.findUserById(request.getOwnerId());
-
-        if (user == null) {
-            throw new ItemNotFoundException(USER_NOT_FOUND_STRING);
+        if (!customTokenIdCatcher.isIdInTokenEquals(token, request.getOwnerId())){
+            throw new IllegalArgumentException(CAN_T_CREATE_NEW_DEAL);
         }
 
-        long id = dealsService.createNewDeal(request, user);
+        DetailedUserInfoResponse detailedUserInfoById = userService.getDetailedUserInfoById(request.getOwnerId());
 
-        return new ResponseEntity<>(new OperationResultResponse("Add", ((Long) id).toString()), HttpStatus.CREATED);
+        Long id = dealsService.createNewDeal(request, detailedUserInfoById);
+
+        return new ResponseEntity<>(new OperationResultResponse("Add", id.toString()), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "An attempt to subscribe user to deal")
-    @PostMapping("/subscribe/deal")
-    public ResponseEntity<OperationResultResponse> subscribeUser(@Valid @RequestBody SubscribeRequest request) {
+    @PostMapping(value = "/subscribe/deal", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OperationResultResponse> subscribeUser(
+            @Valid @RequestBody SubscribeRequest request,
+            @RequestHeader(name="Authorization") String token) {
+        if (!customTokenIdCatcher.isIdInTokenEquals(token, request.getSubscriberId())){
+            throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_ANOTHER_USER_STRING);
+        }
 
         long subscriberId = request.getSubscriberId();
         long dealId = request.getDealId();
 
-        User user = userService.findUserById(subscriberId);
+        DetailedUserInfoResponse detailedUserInfoById = userService.getDetailedUserInfoById(subscriberId);
 
-        if (user == null) {
-            throw new ItemNotFoundException(USER_NOT_FOUND_STRING);
-        }
         Deal deal = dealsService.findDealById(dealId);
 
-        if (deal == null) {
-            throw new ItemNotFoundException(DEAL_NOT_FOUND_STRING);
-        }
-
-        if (deal.getOwner() == subscriberId) {
-            throw new IllegalArgumentException(USER_CANT_SUBSCRIBE_SELF_STRING);
-        }
-
-        String result = dealsService.addSubscription(dealId, subscriberId);
+        String result = dealsService.addSubscription(deal, detailedUserInfoById.getId());
 
         return new ResponseEntity<>(
                 new OperationResultResponse(
                         "Subscribe",
                         result),
                 HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "An attempt to set user avatar")
+    @PostMapping(value = "/user/avatar",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<OperationResultResponse> updateUserAvatar(
+            @RequestParam("avatarFile") MultipartFile file,
+            @RequestHeader(name="Authorization") String token) {
+
+        long idFromToken = customTokenIdCatcher.getIdFromToken(token);
+
+        imageService.updateUserAvatar(idFromToken, file);
+
+
+        return new ResponseEntity<>(new OperationResultResponse("Update avatar","Ok"), HttpStatus.CREATED);
     }
 }

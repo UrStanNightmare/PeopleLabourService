@@ -19,12 +19,17 @@ CREATE SEQUENCE IF NOT EXISTS public.users_id_sequence
 ALTER SEQUENCE public.users_id_sequence
     OWNER TO postgres;
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE TABLE IF NOT EXISTS public.users
 (
     id bigint NOT NULL,
-    first_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
-    last_name character varying(30) COLLATE pg_catalog."default" NOT NULL,
-    patronymic character varying(30) COLLATE pg_catalog."default",
+    first_name CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
+    last_name CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
+    middle_name CHARACTER VARYING(30) COLLATE pg_catalog."default",
+    login CHARACTER VARYING(30) COLLATE pg_catalog."default" NOT NULL,
+    password VARCHAR(60) COLLATE  pg_catalog."default" NOT NULL,
+    phone_number VARCHAR(12) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 
@@ -48,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.deals
     CONSTRAINT fkelgjlc4287c3492tviyvrv52f FOREIGN KEY (owner_id)
         REFERENCES public.users (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
     CONSTRAINT deals_service_price_check CHECK (service_price >= 0::numeric)
 )
 
@@ -63,19 +68,18 @@ CREATE TABLE IF NOT EXISTS public.deals_subscribers
 (
     deal_id bigint NOT NULL,
     subscribers_id bigint NOT NULL,
-    CONSTRAINT deals_subscribers_pkey PRIMARY KEY (deal_id, subscribers_id),
-    CONSTRAINT uk_g0s42ql3s412bpp81uuoj1kk7 UNIQUE (subscribers_id),
+
     CONSTRAINT fkmjeis57buog8n87tnyc9p096s FOREIGN KEY (deal_id)
         REFERENCES public.deals (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
     CONSTRAINT fkmoxfmdefirn57i03i78n4nl3k FOREIGN KEY (subscribers_id)
         REFERENCES public.users (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
 
     TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.services_subscribers
+ALTER TABLE IF EXISTS public.deals_subscribers
     OWNER to postgres;

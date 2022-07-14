@@ -1,40 +1,42 @@
 package ru.academicians.myhelper.model;
 
-import org.springframework.lang.Nullable;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.util.LinkedList;
+import java.util.List;
 
-import static ru.academicians.myhelper.defaults.DefaultRequirements.*;
+public class DetailedUserInfoResponse {
+    private Long id;
 
-public class AddPersonRequest {
-    @NotBlank
     @NotNull
-    @Pattern(regexp = NAME_REGEXP)
+    @NotBlank
     private String lastName;
-    @NotBlank
+
     @NotNull
-    @Pattern(regexp = NAME_REGEXP)
+    @NotBlank
     private String firstName;
 
-    @Pattern(regexp = NAME_REGEXP)
-    @Nullable
+    @NotNull
+    @NotBlank
+    private String login;
+
     private String middleName;
 
     @NotNull
-    @Pattern(regexp = LOG_IN_REGEXP)
-    private String login;
-
-    @NotNull
-    @Pattern(regexp = PASSWORD_REGEXP)
-    private String password;
-
-    @NotNull
-    @Pattern(regexp = PHONE_NUMBER_REGEXP)
+    @NotBlank
     private String phoneNumber;
 
-    public AddPersonRequest() {
+    private List<ShortDealInfoResponse> placedDeals;
+
+    public DetailedUserInfoResponse() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLastName() {
@@ -61,6 +63,14 @@ public class AddPersonRequest {
         this.middleName = middleName;
     }
 
+    public List<ShortDealInfoResponse> getPlacedDeals() {
+        return placedDeals;
+    }
+
+    public void setPlacedDeals(List<ShortDealInfoResponse> placedDeals) {
+        this.placedDeals = placedDeals;
+    }
+
     public String getLogin() {
         return login;
     }
@@ -69,19 +79,18 @@ public class AddPersonRequest {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addPlacedDeals(ShortDealInfoResponse deal){
+        if (this.placedDeals == null){
+            this.placedDeals = new LinkedList<>();
+        }
+        this.placedDeals.add(deal);
     }
 }

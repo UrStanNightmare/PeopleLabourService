@@ -1,9 +1,17 @@
 package ru.academicians.myhelper.repository.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
+@JsonIgnoreProperties(value = {
+        "password"
+})
 public class User {
     private Long id;
 
@@ -15,26 +23,32 @@ public class User {
     @NotBlank
     private String firstName;
 
+    private String middleName;
+
     @NotNull
     @NotBlank
-    private String patronymic;
+    private String login;
+
+    @NotNull
+    @NotBlank
+    private String password;
+
+    @NotNull
+    @NotBlank
+    private String phoneNumber;
+
+    private Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
 
     public User() {
     }
 
 
-    public User(String lastName, String firstName, String patronymic) {
+    public User(String lastName, String firstName, String middleName, String login, String password) {
         this.lastName = lastName;
         this.firstName = firstName;
-        this.patronymic = patronymic;
-    }
-
-
-    public User(Long id, String lastName, String firstName, String patronymic) {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.patronymic = patronymic;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
     }
 
     public Long getId() {
@@ -61,12 +75,63 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Collection<GrantedAuthority> getGrantedAuthoritiesList() {
+        return grantedAuthoritiesList;
+    }
+
+    public void setGrantedAuthoritiesList(Collection<GrantedAuthority> grantedAuthoritiesList) {
+        this.grantedAuthoritiesList = grantedAuthoritiesList;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User(Long id, String lastName, String firstName, String middleName, String login, String password, String phoneNumber) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User(String lastName, String firstName, String middleName, String login, String password, String phoneNumber) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.login = login;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -74,11 +139,25 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(patronymic, user.patronymic);
+        return id.equals(user.id) && lastName.equals(user.lastName) && firstName.equals(user.firstName) && Objects.equals(middleName, user.middleName) && login.equals(user.login) && password.equals(user.password) && phoneNumber.equals(user.phoneNumber) && Objects.equals(grantedAuthoritiesList, user.grantedAuthoritiesList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastName, firstName, patronymic);
+        return Objects.hash(id, lastName, firstName, middleName, login, password, phoneNumber, grantedAuthoritiesList);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", grantedAuthoritiesList=" + grantedAuthoritiesList +
+                '}';
     }
 }
