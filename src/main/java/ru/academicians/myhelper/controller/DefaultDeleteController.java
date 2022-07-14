@@ -71,7 +71,7 @@ public class DefaultDeleteController {
                 , HttpStatus.OK);
     }
 
-    @ApiOperation(value = "An attempt to delete deal")
+    @ApiOperation(value = "An attempt to delete subscription")
     @DeleteMapping("/unsubscribe/deal")
     public ResponseEntity<OperationResultResponse> deleteDealSubscription(
             @Valid @RequestBody SubscribeRequest request,

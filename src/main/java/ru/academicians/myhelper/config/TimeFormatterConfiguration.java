@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.academicians.myhelper.defaults.DefaultRequirements;
 
 @Configuration
-public class DateTimeFormatConfiguration implements WebMvcConfigurer {
+public class TimeFormatterConfiguration implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();

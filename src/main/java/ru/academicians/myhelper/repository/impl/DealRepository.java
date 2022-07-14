@@ -78,7 +78,9 @@ public class DealRepository implements DefaultDealRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO deals(service_city, service_date, service_desc, service_name, service_price, owner_id) VALUES (? ,? ,? ,? ,? ,?)",
+                    "INSERT INTO " +
+                            "deals(service_city, service_date, service_desc, service_name, service_price, owner_id) " +
+                            "VALUES (? ,? ,? ,? ,? ,?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, deal.getCity());
             LocalDateTime date = deal.getDate();
@@ -123,7 +125,8 @@ public class DealRepository implements DefaultDealRepository {
     }
 
     @Override
-    public Deal findDealByOwnerIdAndCityAndDateAndDescriptionAndNameAndPrice(Long ownerId, String city, LocalDateTime date, String description, String name, BigInteger price) {
+    public Deal findDealByOwnerIdAndCityAndDateAndDescriptionAndNameAndPrice(
+            Long ownerId, String city, LocalDateTime date, String description, String name, BigInteger price) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM deals " +

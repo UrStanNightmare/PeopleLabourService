@@ -94,7 +94,6 @@ public class DefaultPostController {
     @ApiOperation(value = "An attempt to set user avatar")
     @PostMapping(value = "/user/avatar",
             produces = MediaType.APPLICATION_JSON_VALUE
-//            consumes = MediaType.IMAGE_PNG_VALUE
     )
     public ResponseEntity<OperationResultResponse> updateUserAvatar(
             @RequestParam("avatarFile") MultipartFile file,
