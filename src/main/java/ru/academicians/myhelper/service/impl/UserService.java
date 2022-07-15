@@ -104,8 +104,13 @@ public class UserService implements DefaultUserService {
 
         if (updateArgs.containsKey("login")) {
             User login = defaultUserRepository.findUserByLogin((String) updateArgs.get("login"));
-            if (id != login.getId()) {
-                throw new IllegalArgumentException(USERNAME_OCCUPIED);
+            if (login != null){
+                if (login.getId() == id){
+                    updateArgs.remove("login");
+                }else {
+                    throw new IllegalArgumentException(USERNAME_OCCUPIED);
+                }
+
             }
         }
 
