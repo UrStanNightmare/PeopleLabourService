@@ -22,7 +22,7 @@ public class DealFilter {
     @JsonFormat(pattern = DATE_PATTERN)
     private LocalDateTime endDate;
 
-    @Size(min = 5, max=MAX_SERVICE_CITY_LENGTH)
+    @Size(min = 1, max=MAX_SERVICE_CITY_LENGTH)
     @Pattern(regexp = DEAL_CITY_REGEXP_WITH_NULL)
     private String city;
 
