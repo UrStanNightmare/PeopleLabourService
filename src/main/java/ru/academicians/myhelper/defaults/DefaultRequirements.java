@@ -13,11 +13,11 @@ public class DefaultRequirements {
     public static final int MAX_SERVICE_CITY_LENGTH = 20;
 
 
-    public static final String NAME_REGEXP = "^[a-zA-Zа-яА-Я-]{5,"+ MAX_NAME_LENGTH + "}$";
+    public static final String NAME_REGEXP = "^[a-zA-Zа-яА-Я-]{1,"+ MAX_NAME_LENGTH + "}$";
     public static final String NAME_REGEXP_WITH_NULL = "^[a-zA-Zа-яА-Я\\s\\-]*$";
-    public static final String DEAL_NAME_REGEXP = "^[a-zA-Zа-яА-Я-.?!, -]{5,"+ MAX_SERVICE_NAME_LENGTH + "}$";
+    public static final String DEAL_NAME_REGEXP = "^[a-zA-Zа-яА-Я-.?!, -]{1,"+ MAX_SERVICE_NAME_LENGTH + "}$";
     public static final String DEAL_NAME_REGEXP_WITH_NULL = "^[a-zA-Zа-яА-Я-.?!,\\s\\- ]*$";
-    public static final String DEAL_DESCRIPTION_REGEXP = "^[a-zA-Zа-яА-Я-.?!, ]{5,"+ MAX_SERVICE_DESCRIPTION_LENGTH + "}$";
+    public static final String DEAL_DESCRIPTION_REGEXP = "^[a-zA-Zа-яА-Я-.?!, ]{1,"+ MAX_SERVICE_DESCRIPTION_LENGTH + "}$";
     public static final String DEAL_DESCRIPTION_REGEXP_WITH_NULL = "^[a-zA-Zа-яА-Я.?!,\\s\\- ]*$";
     public static final String DEAL_CITY_REGEXP = "^[a-zA-Zа-яА-Я0-9- ]{5,"+ MAX_SERVICE_CITY_LENGTH + "}$";
     public static final String DEAL_CITY_REGEXP_WITH_NULL = "^[a-zA-Zа-яА-Я0-9\\s\\- ]*$";

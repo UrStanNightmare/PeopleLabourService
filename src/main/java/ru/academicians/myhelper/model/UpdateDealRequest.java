@@ -14,15 +14,15 @@ import java.util.Map;
 import static ru.academicians.myhelper.defaults.DefaultRequirements.*;
 
 public class UpdateDealRequest {
-    @Size(min = 5, max=MAX_SERVICE_NAME_LENGTH)
+    @Size(min = 1, max=MAX_SERVICE_NAME_LENGTH)
     @Pattern(regexp = DEAL_NAME_REGEXP_WITH_NULL)
     private String name;
 
-    @Size(min = 5, max=MAX_SERVICE_DESCRIPTION_LENGTH)
+    @Size(min = 1, max=MAX_SERVICE_DESCRIPTION_LENGTH)
     @Pattern(regexp = DEAL_DESCRIPTION_REGEXP_WITH_NULL)
     private String description;
 
-    @Size(min = 5, max=MAX_SERVICE_CITY_LENGTH)
+    @Size(min = 1, max=MAX_SERVICE_CITY_LENGTH)
     @Pattern(regexp = DEAL_CITY_REGEXP_WITH_NULL)
     private String city;
 

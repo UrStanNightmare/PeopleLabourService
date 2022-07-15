@@ -9,19 +9,19 @@ import static ru.academicians.myhelper.defaults.DefaultRequirements.*;
 
 public class UpdateUserDataRequest {
 
-    @Size(min = 5, max = MAX_NAME_LENGTH)
+    @Size(min = 1, max = MAX_NAME_LENGTH)
     @Pattern(regexp = NAME_REGEXP_WITH_NULL)
     private final String firstName;
 
-    @Size(min = 5, max = MAX_NAME_LENGTH)
+    @Size(min = 1, max = MAX_NAME_LENGTH)
     @Pattern(regexp = NAME_REGEXP_WITH_NULL)
     private final String lastName;
 
-    @Size(min = 5, max = MAX_NAME_LENGTH)
+    @Size(min = 1, max = MAX_NAME_LENGTH)
     @Pattern(regexp = NAME_REGEXP_WITH_NULL)
     private final String middleName;
 
-    @Size(min = 5, max = MAX_NAME_LENGTH)
+    @Size(min = 1, max = MAX_NAME_LENGTH)
     @Pattern(regexp = LOG_IN_REGEXP_WITH_NULL)
     private final String login;
 
