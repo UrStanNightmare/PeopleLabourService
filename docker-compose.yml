@@ -9,7 +9,9 @@ services:
       - 27020:27020
     depends_on:
       - yrd-postgres
-        
+    volumes:
+      - ./data:/data
+
   postgres:
     container_name: yrd-postgres
     image: postgres:12.1-alpine
